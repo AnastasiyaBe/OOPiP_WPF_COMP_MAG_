@@ -1,0 +1,14 @@
+﻿<Window x:Class="ComputerStoreWPF.RoleSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Магазин компьютерной техники" Height="250" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+            <TextBlock Text="Добро пожаловать!" FontSize="20" Margin="0 0 0 25"
+                       HorizontalAlignment="Center"/>
+            <Button Content="Перейти в каталог" Width="220" Height="45"
+                    Click="OpenCatalog_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
