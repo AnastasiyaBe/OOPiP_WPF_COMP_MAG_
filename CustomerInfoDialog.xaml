@@ -1,0 +1,56 @@
+﻿<Window x:Class="ComputerStoreWPF.CustomerInfoDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Оформление заказа" Height="500" Width="550"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Ваши данные" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Имя:" VerticalAlignment="Center" Margin="5"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Name="NameTextBox" Margin="5" Height="25"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Телефон:" VerticalAlignment="Center" Margin="5"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="PhoneTextBox" Margin="5" Height="25"/>
+        </Grid>
+
+        <TextBlock Grid.Row="2" Text="Состав заказа" FontSize="16" FontWeight="Bold" Margin="0,10,0,5"/>
+
+        <ListView Grid.Row="3" Name="OrderItemsListView" Height="150" Margin="0,0,0,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Товар" Width="200" DisplayMemberBinding="{Binding Product.Name}"/>
+                    <GridViewColumn Header="Цена (BYN)" Width="80" DisplayMemberBinding="{Binding Product.Price, StringFormat={}{0:F2}}"/>
+                    <GridViewColumn Header="Кол-во" Width="60" DisplayMemberBinding="{Binding Quantity}"/>
+                    <GridViewColumn Header="Сумма" Width="80" DisplayMemberBinding="{Binding Total, StringFormat={}{0:F2}}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+            <TextBlock Text="Итого к оплате: " FontSize="16" FontWeight="Bold"/>
+            <TextBlock Name="TotalTextBlock" FontSize="16" FontWeight="Bold" Foreground="Green"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15">
+            <Button Content="Оформить заказ" Width="120" Height="35" Margin="5" Click="OkButton_Click" IsDefault="True"/>
+            <Button Content="Отмена" Width="120" Height="35" Margin="5" Click="CancelButton_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using ComputerLibrary.Models;
+﻿//какие методы должен предоставлять репозиторий, реализация в CategoryRepository
+using System.Collections.Generic;
 
-namespace ComputerLibrary.Interfaces
+namespace ComputerLibrary
 {
     public interface ICategoryRepository
     {
-        List<Category> GetAllCategories();
+        List<Category> GetAll();
     }
 }

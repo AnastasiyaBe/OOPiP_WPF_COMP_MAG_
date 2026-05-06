@@ -1,4 +1,5 @@
-﻿namespace ComputerLibrary.Models
+﻿//производитель товара
+namespace ComputerLibrary
 {
     public class Manufacturer
     {

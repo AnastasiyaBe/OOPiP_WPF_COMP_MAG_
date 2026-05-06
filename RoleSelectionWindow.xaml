@@ -5,10 +5,9 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-            <TextBlock Text="Добро пожаловать!" FontSize="20" Margin="0 0 0 25"
-                       HorizontalAlignment="Center"/>
-            <Button Content="Перейти в каталог" Width="220" Height="45"
-                    Click="OpenCatalog_Click"/>
+            <TextBlock Text="Выберите роль входа" FontSize="20" Margin="0 0 0 25" HorizontalAlignment="Center"/>
+            <Button Name="UserButton" Content="Войти как покупатель" Width="220" Height="45" Margin="0 8" Click="UserButton_Click"/>
+            <Button Name="AdminButton" Content="Войти как администратор" Width="220" Height="45" Margin="0 8" Click="AdminButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

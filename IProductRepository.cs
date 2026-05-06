@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
-using ComputerLibrary.Models;
+﻿//какие методы должен реализовать репозиторий для работы с товарами и производителями
+using System.Collections.Generic;
 
-namespace ComputerLibrary.Interfaces
+namespace ComputerLibrary
 {
     public interface IProductRepository
     {
-        List<Product> GetAllProducts();
+        List<Product> GetAll();
+        List<Product> GetFilteredAndSorted(int? manufacturerId, string sortByPrice);
         List<Manufacturer> GetAllManufacturers();
+        void AddProduct(Product product);
+        void UpdateProduct(Product product);
+        void DeleteProduct(int productId);
     }
 }

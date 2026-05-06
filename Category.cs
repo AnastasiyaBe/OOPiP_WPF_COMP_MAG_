@@ -1,4 +1,5 @@
-﻿namespace ComputerLibrary.Models
+﻿//категория товара
+namespace ComputerLibrary
 {
     public class Category
     {

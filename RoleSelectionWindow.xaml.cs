@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ComputerLibrary;
 
 namespace ComputerStoreWPF
 {
@@ -9,11 +10,24 @@ namespace ComputerStoreWPF
             InitializeComponent();
         }
 
-        private void OpenCatalog_Click(object sender, RoutedEventArgs e)
+        private void UserButton_Click(object sender, RoutedEventArgs e)
         {
+            DbConnectionFactory.Instance.InitializeAsUser();
             var catalogWindow = new CatalogWindow();
             catalogWindow.Show();
             this.Close();
+        }
+
+        private void AdminButton_Click(object sender, RoutedEventArgs e)
+        {
+            var passwordWindow = new PasswordWindow();
+            passwordWindow.Owner = this;
+            if (passwordWindow.ShowDialog() == true)
+            {
+                var adminWindow = new AdminWindow(new ProductRepository(), new OrderRepository(), new CategoryRepository());
+                adminWindow.Show();
+                this.Close();
+            }
         }
     }
 }

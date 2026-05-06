@@ -6,13 +6,22 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Товары" FontSize="24" FontWeight="Bold"
-                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <TextBlock Text="Магазин компьютерной техники" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,15" HorizontalAlignment="Center">
+            <TextBlock Text="Производитель:" VerticalAlignment="Center" Margin="5,0"/>
+            <ComboBox Name="ManufacturerCombo" Width="150" Margin="5,0" SelectionChanged="ManufacturerCombo_SelectionChanged"/>
+            <TextBlock Text="Сортировка по цене:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+            <RadioButton Name="PriceAscRadio" Content="По возрастанию" Margin="5,0" GroupName="PriceSort" Checked="Sorting_Changed"/>
+            <RadioButton Name="PriceDescRadio" Content="По убыванию" Margin="5,0" GroupName="PriceSort" Checked="Sorting_Changed"/>
+            <Button Name="GoToCartButton" Content="Перейти в корзину" Width="140" Margin="20,0,0,0" Click="GoToCartButton_Click"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <ItemsControl Name="ProductsItemsControl">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -21,21 +30,15 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="8"
-                                Width="220" Margin="12" Padding="8" Background="White">
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Width="220" Margin="12" Padding="8" Background="White">
                             <StackPanel>
-                                <Border Background="LightGray" Height="150" CornerRadius="5"
-                                        Margin="0,0,0,8">
-                                    <TextBlock Text="[Изображение]" VerticalAlignment="Center"
-                                               HorizontalAlignment="Center" FontSize="14"/>
+                                <Border Background="LightGray" Height="150" CornerRadius="5" Margin="0,0,0,8">
+                                    <TextBlock Text="[Изображение]" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                                 </Border>
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold"
-                                           FontSize="16" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding Price, StringFormat={}{0:C2} BYN}"
-                                           Foreground="Green" FontSize="14" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding StockQuantity,
-                                    StringFormat=Остаток: {0} шт.}" FontSize="12"
-                                           Foreground="Gray"/>
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding Price, StringFormat={}{0:C2} BYN}" Foreground="Green" FontSize="14" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding StockQuantity, StringFormat=Остаток: {0} шт.}" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                                <Button Content="В корзину" Margin="0,5,0,0" Tag="{Binding}" Click="AddToCart_Click"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>

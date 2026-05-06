@@ -1,4 +1,4 @@
-﻿namespace ComputerLibrary.Models
+﻿namespace ComputerLibrary
 {
     public class Product
     {
