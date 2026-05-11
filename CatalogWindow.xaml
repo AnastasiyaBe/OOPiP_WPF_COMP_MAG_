@@ -19,6 +19,7 @@
             <RadioButton Name="PriceAscRadio" Content="По возрастанию" Margin="5,0" GroupName="PriceSort" Checked="Sorting_Changed"/>
             <RadioButton Name="PriceDescRadio" Content="По убыванию" Margin="5,0" GroupName="PriceSort" Checked="Sorting_Changed"/>
             <Button Name="GoToCartButton" Content="Перейти в корзину" Width="140" Margin="20,0,0,0" Click="GoToCartButton_Click"/>
+            <Button Name="ChangeRoleButton" Content="Сменить роль" Width="120" Margin="10,0,0,0" Click="ChangeRoleButton_Click"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">

@@ -79,5 +79,12 @@ namespace ComputerStoreWPF
                 LoadProducts(); 
             }
         }
+
+        private void ChangeRoleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var roleWindow = new RoleSelectionWindow();
+            roleWindow.Show();
+            this.Close();
+        }
     }
 }

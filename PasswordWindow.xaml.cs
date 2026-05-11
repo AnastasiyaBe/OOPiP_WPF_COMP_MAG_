@@ -1,5 +1,6 @@
-﻿using System.Windows;
-using ComputerLibrary;
+﻿using ComputerLibrary;
+using ComputerLibrary.Repositories;
+using System.Windows;
 
 namespace ComputerStoreWPF
 {
@@ -12,16 +13,24 @@ namespace ComputerStoreWPF
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            string enteredPassword = PasswordBox.Password;
-            if (DbConnectionFactory.Instance.InitializeAsAdmin(enteredPassword))
+            string password = PasswordBox.Password;
+            if (string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Доступ разрешён", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Введите пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var userRepo = new UserRepository();
+            var admin = userRepo.AuthenticateAdmin("admin", password);
+            if (admin != null)
+            {
+                DbConnectionFactory.Instance.InitializeAsAdmin(); // переключаем на администратора
                 DialogResult = true;
                 Close();
             }
             else
             {
-                MessageBox.Show("Неверный пароль администратора.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Неверный пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

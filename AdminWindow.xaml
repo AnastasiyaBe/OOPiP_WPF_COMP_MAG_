@@ -3,81 +3,115 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Администрирование" Height="550" Width="900"
         WindowStartupLocation="CenterScreen">
-    <TabControl Margin="10">
-        <TabItem Header="Товары">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                    <Button Content="Добавить товар" Width="120" Height="30" Click="AddProduct_Click"/>
-                    <Button Content="Удалить выбранный" Width="120" Height="30" Margin="10,0,0,0" Click="DeleteProduct_Click"/>
-                    <Button Content="Сохранить изменения" Width="140" Height="30" Margin="10,0,0,0" Click="SaveProducts_Click"/>
-                </StackPanel>
-                <DataGrid Grid.Row="1" Name="ProductsGrid" AutoGenerateColumns="False" CanUserAddRows="False" 
-                          IsReadOnly="False" SelectionMode="Single" SelectionUnit="FullRow" 
-                          RowHeaderWidth="0" CanUserDeleteRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="40" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="180" IsReadOnly="False"/>
-                        <DataGridTextColumn Header="Цена (BYN)" Binding="{Binding Price, StringFormat={}{0:F2}}" Width="100" IsReadOnly="False"/>
-                        <DataGridTextColumn Header="Количество" Binding="{Binding StockQuantity}" Width="80" IsReadOnly="False"/>
-                        <DataGridTextColumn Header="Характеристики" Binding="{Binding Characteristics}" Width="200" IsReadOnly="False"/>
-                        <DataGridTemplateColumn Header="Категория" Width="120">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Categories}"
-                                              SelectedValue="{Binding CategoryId, UpdateSourceTrigger=PropertyChanged}"
-                                              DisplayMemberPath="Name" SelectedValuePath="Id" IsSynchronizedWithCurrentItem="False"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Производитель" Width="120">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Manufacturers}"
-                                              SelectedValue="{Binding ManufacturerId, UpdateSourceTrigger=PropertyChanged}"
-                                              DisplayMemberPath="Name" SelectedValuePath="Id" IsSynchronizedWithCurrentItem="False"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </TabItem>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- строка для кнопки смены роли -->
+            <RowDefinition Height="*"/>
+            <!-- остальное содержимое -->
+        </Grid.RowDefinitions>
 
-        <TabItem Header="Заказы">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                    <Button Content="Сохранить статусы" Width="140" Height="30" Click="SaveOrders_Click"/>
-                    <Button Content="Удалить выбранный заказ" Width="160" Height="30" Margin="10,0,0,0" Click="DeleteOrder_Click"/>
-                </StackPanel>
-                <DataGrid Grid.Row="1" Name="OrdersGrid" AutoGenerateColumns="False" CanUserAddRows="False" 
-                          IsReadOnly="False" SelectionMode="Single" SelectionUnit="FullRow">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="40" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Дата" Binding="{Binding OrderDate, StringFormat=dd.MM.yyyy HH:mm}" Width="120" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Имя" Binding="{Binding CustomerName}" Width="150" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Телефон" Binding="{Binding CustomerPhone}" Width="120" IsReadOnly="True"/>
-                        <DataGridTemplateColumn Header="Статус" Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.OrderStatuses}"
-                                              SelectedValue="{Binding Status, UpdateSourceTrigger=PropertyChanged}"
-                                              IsEditable="False"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </TabItem>
-    </TabControl>
+        <!-- Кнопка смены роли справа вверху -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
+            <Button Content="Сменить роль" Width="100" Height="30" Click="ChangeRoleButton_Click"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="1" Margin="0">
+            <!-- Вкладка Товары -->
+            <TabItem Header="Товары">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!-- Центрированные кнопки управления товарами -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="Добавить товар" Width="120" Height="30" Margin="5,0" Click="AddProduct_Click"/>
+                            <Button Content="Удалить выбранный" Width="120" Height="30" Margin="5,0" Click="DeleteProduct_Click"/>
+                            <Button Content="Сохранить изменения" Width="140" Height="30" Margin="5,0" Click="SaveProducts_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid Grid.Row="1" Name="ProductsGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                              IsReadOnly="False" SelectionMode="Single" SelectionUnit="FullRow"
+                              RowHeaderWidth="0" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="40" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*" MinWidth="150" IsReadOnly="False"/>
+                            <DataGridTextColumn Header="Цена (BYN)" Binding="{Binding Price, StringFormat={}{0:F2}}" Width="100" IsReadOnly="False"/>
+                            <DataGridTextColumn Header="Количество" Binding="{Binding StockQuantity}" Width="80" IsReadOnly="False"/>
+                            <DataGridTextColumn Header="Характеристики" Binding="{Binding Characteristics}" Width="200" MinWidth="150" IsReadOnly="False"/>
+                            <DataGridTemplateColumn Header="Категория" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Categories}"
+                                                  SelectedValue="{Binding CategoryId, UpdateSourceTrigger=PropertyChanged}"
+                                                  DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Производитель" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Manufacturers}"
+                                                  SelectedValue="{Binding ManufacturerId, UpdateSourceTrigger=PropertyChanged}"
+                                                  DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка Заказы -->
+            <TabItem Header="Заказы">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!-- Центрированные кнопки управления заказами -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="Сохранить статусы" Width="140" Height="30" Margin="5,0" Click="SaveOrders_Click"/>
+                            <Button Content="Удалить выбранный заказ" Width="160" Height="30" Margin="5,0" Click="DeleteOrder_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid Grid.Row="1" Name="OrdersGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                              IsReadOnly="False" SelectionMode="Single" SelectionUnit="FullRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="40" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding OrderDate, StringFormat=dd.MM.yyyy HH:mm}" Width="120" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Имя" Binding="{Binding CustomerName}" Width="*" MinWidth="120" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding CustomerPhone}" Width="120" IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="Статус" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.OrderStatuses}"
+                                                  SelectedValue="{Binding Status, UpdateSourceTrigger=PropertyChanged}"
+                                                  IsEditable="False"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>

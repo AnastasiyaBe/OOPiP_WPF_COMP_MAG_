@@ -10,34 +10,34 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListView Name="CartListView">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Выбрать" Width="60">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSelected}" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                                          Click="SelectionChanged"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Товар" Width="200" DisplayMemberBinding="{Binding Product.Name}"/>
-                    <GridViewColumn Header="Цена (BYN)" Width="100" DisplayMemberBinding="{Binding Product.Price, StringFormat={}{0:F2}}"/>
-                    <GridViewColumn Header="Количество" Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Name="DecreaseBtn" Content="-" Width="30" Click="Decrease_Click" Tag="{Binding}"/>
-                                    <TextBlock Text="{Binding Quantity}" Width="40" TextAlignment="Center" FontSize="14" VerticalAlignment="Center"/>
-                                    <Button Name="IncreaseBtn" Content="+" Width="30" Click="Increase_Click" Tag="{Binding}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Сумма (BYN)" Width="100" DisplayMemberBinding="{Binding Total, StringFormat={}{0:F2}}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <DataGrid Name="CartDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                  IsReadOnly="False" SelectionMode="Single" SelectionUnit="FullRow"
+                  RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Выбрать" Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected}" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                      Click="SelectionChanged"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Товар" Binding="{Binding Product.Name}" Width="*" MinWidth="150"/>
+                <DataGridTextColumn Header="Цена (BYN)" Binding="{Binding Product.Price, StringFormat={}{0:F2}}" Width="100"/>
+                <DataGridTemplateColumn Header="Количество" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Name="DecreaseBtn" Content="-" Width="30" Click="Decrease_Click" Tag="{Binding}"/>
+                                <TextBlock Text="{Binding Quantity}" Width="40" TextAlignment="Center" FontSize="14" VerticalAlignment="Center"/>
+                                <Button Name="IncreaseBtn" Content="+" Width="30" Click="Increase_Click" Tag="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Сумма (BYN)" Binding="{Binding Total, StringFormat={}{0:F2}}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
             <TextBlock Text="Итого к оплате: " FontSize="16" FontWeight="Bold"/>

@@ -30,18 +30,13 @@ namespace ComputerLibrary
         public void InitializeAsUser()
         {
             _currentRole = "user";
-            _connectionString = ConfigurationManager.ConnectionStrings["UserConnection"].ConnectionString;//читает строку подключения из App.config по ключу "UserConnection"
+            _connectionString = ConfigurationManager.ConnectionStrings["UserConnection"].ConnectionString;
         }
 
-        public bool InitializeAsAdmin(string enteredPassword)
+        public void InitializeAsAdmin()
         {
-            const string correctAdminPassword = "admin123";
-            if (enteredPassword != correctAdminPassword)
-                return false;
-
             _currentRole = "admin";
-            _connectionString = ConfigurationManager.ConnectionStrings["AdminConnection"].ConnectionString;//читает строку подключения "AdminConnection"
-            return true;
+            _connectionString = ConfigurationManager.ConnectionStrings["AdminConnection"].ConnectionString;
         }
 
         public MySqlConnection GetConnection()

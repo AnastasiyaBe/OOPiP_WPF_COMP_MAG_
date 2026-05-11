@@ -41,7 +41,7 @@ namespace ComputerStoreWPF
             _displayItems = new ObservableCollection<DisplayItem>();
             foreach (var item in _originalCart)
                 _displayItems.Add(new DisplayItem { CartItem = item });
-            CartListView.ItemsSource = _displayItems;
+            CartDataGrid.ItemsSource = _displayItems;
             UpdateTotal();
         }
 
@@ -63,7 +63,7 @@ namespace ComputerStoreWPF
             if (display != null)
             {
                 display.CartItem.Quantity++;
-                CartListView.Items.Refresh();
+                CartDataGrid.Items.Refresh();
                 UpdateTotal();
             }
         }
@@ -77,7 +77,7 @@ namespace ComputerStoreWPF
                 if (display.CartItem.Quantity > 1)
                 {
                     display.CartItem.Quantity--;
-                    CartListView.Items.Refresh();
+                    CartDataGrid.Items.Refresh();
                     UpdateTotal();
                 }
                 else

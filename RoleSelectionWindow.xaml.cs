@@ -20,6 +20,8 @@ namespace ComputerStoreWPF
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
+            DbConnectionFactory.Instance.InitializeAsUser();
+
             var passwordWindow = new PasswordWindow();
             passwordWindow.Owner = this;
             if (passwordWindow.ShowDialog() == true)
