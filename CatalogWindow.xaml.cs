@@ -61,7 +61,24 @@ namespace ComputerStoreWPF
             var product = button.Tag as Product;
             if (product == null) return;
 
+            // Проверка: если товара нет на складе, нельзя добавить
+            if (product.StockQuantity <= 0)
+            {
+                MessageBox.Show($"Товар \"{product.Name}\" закончился на складе.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             var existing = _cartItems.FirstOrDefault(ci => ci.Product.Id == product.Id);
+            int currentQty = existing?.Quantity ?? 0;
+            int newQty = currentQty + 1;
+
+            // Проверяем, не превышает ли новое количество остаток
+            if (newQty > product.StockQuantity)
+            {
+                MessageBox.Show($"Нельзя добавить больше, чем есть на складе (доступно: {product.StockQuantity} шт.)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             if (existing != null)
                 existing.Quantity++;
             else

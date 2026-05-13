@@ -1,5 +1,4 @@
-﻿//репозиторий для работы с товарами и производителями
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 
@@ -7,14 +6,45 @@ namespace ComputerLibrary
 {
     public class ProductRepository : IProductRepository
     {
-        //получить все товары без фильтров
+        // полный маппинг с Category и Manufacturer
+        private Product MapProduct(MySqlDataReader reader)
+        {
+            var category = new Category
+            {
+                Id = reader.GetInt32("CategoryId"),
+                Name = reader.GetString("CategoryName")
+            };
+            var manufacturer = new Manufacturer
+            {
+                Id = reader.GetInt32("ManufacturerId"),
+                Name = reader.GetString("ManufacturerName")
+            };
+            return new Product
+            {
+                Id = reader.GetInt32("Id"),
+                Name = reader.GetString("Name"),
+                Characteristics = reader.GetString("Characteristics"),
+                Price = reader.GetDecimal("Price"),
+                StockQuantity = reader.GetInt32("StockQuantity"),
+                ImagePath = reader.IsDBNull(reader.GetOrdinal("ImagePath")) ? null : reader.GetString("ImagePath"),
+                Category = category,
+                Manufacturer = manufacturer
+            };
+        }
+
         public List<Product> GetAll()
         {
             var products = new List<Product>();
             using (var conn = DbConnectionFactory.Instance.GetConnection())
             {
                 conn.Open();
-                string sql = "SELECT Id, Name, Characteristics, Price, StockQuantity, ImagePath, CategoryId, ManufacturerId FROM Products";
+                string sql = @"
+                    SELECT p.Id, p.Name, p.Characteristics, p.Price, p.StockQuantity, p.ImagePath,
+                           c.Id AS CategoryId, c.Name AS CategoryName,
+                           m.Id AS ManufacturerId, m.Name AS ManufacturerName
+                    FROM Products p
+                    INNER JOIN Categories c ON p.CategoryId = c.Id
+                    INNER JOIN Manufacturers m ON p.ManufacturerId = m.Id";
                 using (var cmd = new MySqlCommand(sql, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -25,24 +55,29 @@ namespace ComputerLibrary
             return products;
         }
 
-        //возвращает товары с возможной фильтрацией по производителю и сортировкой по цене
         public List<Product> GetFilteredAndSorted(int? manufacturerId, string sortByPrice)
         {
             var products = new List<Product>();
             using (var conn = DbConnectionFactory.Instance.GetConnection())
             {
                 conn.Open();
-                string sql = "SELECT Id, Name, Characteristics, Price, StockQuantity, ImagePath, CategoryId, ManufacturerId FROM Products WHERE 1=1";
+                string sql = @"
+                    SELECT p.Id, p.Name, p.Characteristics, p.Price, p.StockQuantity, p.ImagePath,
+                           c.Id AS CategoryId, c.Name AS CategoryName,
+                           m.Id AS ManufacturerId, m.Name AS ManufacturerName
+                    FROM Products p
+                    INNER JOIN Categories c ON p.CategoryId = c.Id
+                    INNER JOIN Manufacturers m ON p.ManufacturerId = m.Id
+                    WHERE 1=1";
                 if (manufacturerId.HasValue && manufacturerId.Value > 0)
-                    sql += " AND ManufacturerId = @manId";
+                    sql += " AND m.Id = @manId";
                 if (!string.IsNullOrEmpty(sortByPrice) && (sortByPrice == "ASC" || sortByPrice == "DESC"))
-                    sql += $" ORDER BY Price {sortByPrice}";
+                    sql += $" ORDER BY p.Price {sortByPrice}";
 
                 using (var cmd = new MySqlCommand(sql, conn))
                 {
                     if (manufacturerId.HasValue && manufacturerId.Value > 0)
                         cmd.Parameters.AddWithValue("@manId", manufacturerId.Value);
-
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -53,7 +88,6 @@ namespace ComputerLibrary
             return products;
         }
 
-        //получить всех производителей
         public List<Manufacturer> GetAllManufacturers()
         {
             var manufacturers = new List<Manufacturer>();
@@ -80,23 +114,6 @@ namespace ComputerLibrary
             return manufacturers;
         }
 
-        //преобразует текущую строку в объект
-        private Product MapProduct(MySqlDataReader reader)
-        {
-            return new Product
-            {
-                Id = reader.GetInt32("Id"),
-                Name = reader.GetString("Name"),
-                Characteristics = reader.GetString("Characteristics"),
-                Price = reader.GetDecimal("Price"),
-                StockQuantity = reader.GetInt32("StockQuantity"),
-                ImagePath = reader.IsDBNull(reader.GetOrdinal("ImagePath")) ? null : reader.GetString("ImagePath"),
-                CategoryId = reader.GetInt32("CategoryId"),
-                ManufacturerId = reader.GetInt32("ManufacturerId")
-            };
-        }
-
-        //добавляет параметры для операций вставки или обновления товара
         private void SetProductParameters(MySqlCommand cmd, Product product, bool includeId = false)
         {
             cmd.Parameters.AddWithValue("@name", product.Name);
@@ -104,13 +121,12 @@ namespace ComputerLibrary
             cmd.Parameters.AddWithValue("@price", product.Price);
             cmd.Parameters.AddWithValue("@stock", product.StockQuantity);
             cmd.Parameters.AddWithValue("@image", product.ImagePath ?? "");
-            cmd.Parameters.AddWithValue("@catId", product.CategoryId);
-            cmd.Parameters.AddWithValue("@manId", product.ManufacturerId);
+            cmd.Parameters.AddWithValue("@catId", product.Category.Id);
+            cmd.Parameters.AddWithValue("@manId", product.Manufacturer.Id);
             if (includeId)
                 cmd.Parameters.AddWithValue("@id", product.Id);
         }
 
-        //добавляет новый товар
         public void AddProduct(Product product)
         {
             using (var conn = DbConnectionFactory.Instance.GetConnection())
@@ -126,7 +142,6 @@ namespace ComputerLibrary
             }
         }
 
-        //обновляет все поля по Id
         public void UpdateProduct(Product product)
         {
             using (var conn = DbConnectionFactory.Instance.GetConnection())
@@ -143,7 +158,6 @@ namespace ComputerLibrary
             }
         }
 
-        //удаляет товар по Id
         public void DeleteProduct(int productId)
         {
             using (var conn = DbConnectionFactory.Instance.GetConnection())

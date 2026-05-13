@@ -123,6 +123,7 @@
     <Compile Include="CustomerInfoDialog.xaml.cs">
       <DependentUpon>CustomerInfoDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImagePathConverter.cs" />
     <Compile Include="PasswordWindow.xaml.cs">
       <DependentUpon>PasswordWindow.xaml</DependentUpon>
     </Compile>
@@ -192,6 +193,30 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\amd_5600.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\intel_i5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\amd_7800x3d.jpg" />
+    <Resource Include="images\asus_zephyrus_g14.jpg" />
+    <Resource Include="images\corsair_vengeance.jpg" />
+    <Resource Include="images\dell_optiplex.jpg" />
+    <Resource Include="images\hp_pavilion.jpg" />
+    <Resource Include="images\intel_i9_13900k.jpg" />
+    <Resource Include="images\kingston_ddr4.jpg" />
+    <Resource Include="images\lenovo_ideapad.jpg" />
+    <Resource Include="images\logitech_g502.jpg" />
+    <Resource Include="images\msi_katana.jpg" />
+    <Resource Include="images\rtx3060.jpg" />
+    <Resource Include="images\rtx4070ti.jpg" />
+    <Resource Include="images\rx6600.jpg" />
+    <Resource Include="images\rx7900xt.jpg" />
+    <Resource Include="images\samsung_980_pro.jpg" />
+    <Resource Include="images\wd_black_sn850x.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

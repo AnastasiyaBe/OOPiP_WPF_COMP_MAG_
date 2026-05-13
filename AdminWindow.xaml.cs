@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ComputerLibrary;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using ComputerLibrary;
+using System.Windows.Controls;
 
 namespace ComputerStoreWPF
 {
@@ -18,8 +19,8 @@ namespace ComputerStoreWPF
             public decimal Price { get => Product.Price; set => Product.Price = value; }
             public int StockQuantity { get => Product.StockQuantity; set => Product.StockQuantity = value; }
             public string ImagePath { get => Product.ImagePath; set => Product.ImagePath = value; }
-            public int CategoryId { get => Product.CategoryId; set => Product.CategoryId = value; }
-            public int ManufacturerId { get => Product.ManufacturerId; set => Product.ManufacturerId = value; }
+            public Category Category { get => Product.Category; set => Product.Category = value; }
+            public Manufacturer Manufacturer { get => Product.Manufacturer; set => Product.Manufacturer = value; }
         }
 
         public class OrderRow
@@ -149,6 +150,29 @@ namespace ComputerStoreWPF
             var roleWindow = new RoleSelectionWindow();
             roleWindow.Show();
             this.Close();
+        }
+
+        private void ProductsGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            // Проверяем, что редактируется колонка "Цена (BYN)" или "Количество"
+            if (e.Column.Header.ToString() == "Цена (BYN)")
+            {
+                var textBox = e.EditingElement as TextBox;
+                if (textBox != null && decimal.TryParse(textBox.Text, out decimal value) && value < 0)
+                {
+                    MessageBox.Show("Цена не может быть отрицательной.", "Ошибка ввода", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    e.Cancel = true; // отменяем завершение редактирования
+                }
+            }
+            else if (e.Column.Header.ToString() == "Количество")
+            {
+                var textBox = e.EditingElement as TextBox;
+                if (textBox != null && int.TryParse(textBox.Text, out int value) && value < 0)
+                {
+                    MessageBox.Show("Количество не может быть отрицательным.", "Ошибка ввода", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }

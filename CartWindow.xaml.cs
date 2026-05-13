@@ -62,6 +62,12 @@ namespace ComputerStoreWPF
             var display = btn.Tag as DisplayItem;
             if (display != null)
             {
+                int newQty = display.CartItem.Quantity + 1;
+                if (newQty > display.CartItem.Product.StockQuantity)
+                {
+                    MessageBox.Show($"Нельзя увеличить количество, доступно только {display.CartItem.Product.StockQuantity} шт.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 display.CartItem.Quantity++;
                 CartDataGrid.Items.Refresh();
                 UpdateTotal();

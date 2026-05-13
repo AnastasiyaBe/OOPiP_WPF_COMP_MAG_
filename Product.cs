@@ -8,8 +8,7 @@
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
         public string ImagePath { get; set; }
-        public int CategoryId { get; set; }
-        public Category category { get; set; }
-        public int ManufacturerId { get; set; }
+        public Category Category { get; set; }       
+        public Manufacturer Manufacturer { get; set; } 
     }
 }

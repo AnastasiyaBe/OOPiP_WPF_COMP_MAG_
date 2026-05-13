@@ -6,9 +6,7 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- строка для кнопки смены роли -->
             <RowDefinition Height="*"/>
-            <!-- остальное содержимое -->
         </Grid.RowDefinitions>
 
         <!-- Кнопка смены роли справа вверху -->
@@ -41,7 +39,8 @@
 
                     <DataGrid Grid.Row="1" Name="ProductsGrid" AutoGenerateColumns="False" CanUserAddRows="False"
                               IsReadOnly="False" SelectionMode="Single" SelectionUnit="FullRow"
-                              RowHeaderWidth="0" CanUserDeleteRows="False">
+                              RowHeaderWidth="0" CanUserDeleteRows="False"
+                              CellEditEnding="ProductsGrid_CellEditEnding">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="40" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*" MinWidth="150" IsReadOnly="False"/>
@@ -52,8 +51,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Categories}"
-                                                  SelectedValue="{Binding CategoryId, UpdateSourceTrigger=PropertyChanged}"
-                                                  DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                      SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}"
+                      DisplayMemberPath="Name"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -61,8 +60,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Manufacturers}"
-                                                  SelectedValue="{Binding ManufacturerId, UpdateSourceTrigger=PropertyChanged}"
-                                                  DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                      SelectedItem="{Binding Manufacturer, UpdateSourceTrigger=PropertyChanged}"
+                      DisplayMemberPath="Name"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

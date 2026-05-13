@@ -6,7 +6,6 @@ using ComputerLibrary;
 
 namespace ComputerStoreWPF
 {
-    //инициализирует окно
     public partial class AddEditProductWindow : Window
     {
         public Product NewProduct { get; private set; }
@@ -21,6 +20,8 @@ namespace ComputerStoreWPF
 
             CategoryCombo.ItemsSource = _categories;
             ManufacturerCombo.ItemsSource = _manufacturers;
+            CategoryCombo.DisplayMemberPath = "Name";
+            ManufacturerCombo.DisplayMemberPath = "Name";
 
             if (existingProduct != null)
             {
@@ -30,8 +31,8 @@ namespace ComputerStoreWPF
                 PriceTextBox.Text = existingProduct.Price.ToString("F2");
                 StockTextBox.Text = existingProduct.StockQuantity.ToString();
                 ImagePathTextBox.Text = existingProduct.ImagePath;
-                CategoryCombo.SelectedValue = existingProduct.CategoryId;
-                ManufacturerCombo.SelectedValue = existingProduct.ManufacturerId;
+                CategoryCombo.SelectedItem = existingProduct.Category;
+                ManufacturerCombo.SelectedItem = existingProduct.Manufacturer;
                 NewProduct = existingProduct;
             }
             else
@@ -40,6 +41,8 @@ namespace ComputerStoreWPF
                 NewProduct = new Product();
                 CategoryCombo.SelectedIndex = 0;
                 ManufacturerCombo.SelectedIndex = 0;
+                NewProduct.Category = (Category)CategoryCombo.SelectedItem;
+                NewProduct.Manufacturer = (Manufacturer)ManufacturerCombo.SelectedItem;
             }
         }
 
@@ -76,8 +79,8 @@ namespace ComputerStoreWPF
             NewProduct.Price = price;
             NewProduct.StockQuantity = stock;
             NewProduct.ImagePath = ImagePathTextBox.Text.Trim();
-            NewProduct.CategoryId = (int)CategoryCombo.SelectedValue;
-            NewProduct.ManufacturerId = (int)ManufacturerCombo.SelectedValue;
+            NewProduct.Category = (Category)CategoryCombo.SelectedItem;
+            NewProduct.Manufacturer = (Manufacturer)ManufacturerCombo.SelectedItem;
 
             DialogResult = true;
             Close();
